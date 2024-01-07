@@ -139,8 +139,6 @@ namespace ZooLink.Services
 
             var spaceLeft = capacity - animalCount;
 
-            Console.WriteLine($"Enclosure {enclosure.Name} has {spaceLeft} spaces left");
-
             return spaceLeft;
         }
     }
