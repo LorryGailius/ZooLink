@@ -1,11 +1,13 @@
 using System.Text.Json.Serialization;
 using Microsoft.EntityFrameworkCore;
+using ZooLink.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("ZooLink"));
 
-// Add services to the container.
+builder.Services.AddScoped<EnclosureService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(option =>

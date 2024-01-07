@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using ZooLink.Domain.Models;
 using ZooLink.DTO;
 using ZooLink.Extensions;
+using ZooLink.Services;
 
 namespace ZooLink.Controllers
 {
@@ -15,75 +16,39 @@ namespace ZooLink.Controllers
     [ApiController]
     public class EnclosuresController : ControllerBase
     {
-        private readonly AppDbContext _context;
+        private readonly EnclosureService _enclosureService;
 
-        public EnclosuresController(AppDbContext context)
+        public EnclosuresController(EnclosureService enclosureService)
         {
-            _context = context;
+            _enclosureService = enclosureService;
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<EnclosureModelDTO>>> GetEnclosures()
         {
-            var enclosures = await _context.Enclosure.ToListAsync();
-
-            return Ok(GetModelDTOList(enclosures));
+            var enclosures = await _enclosureService.GetEnclosures();
+            return Ok(enclosures);
         }
 
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<EnclosureModelDTO>> GetEnclosure(Guid id)
         {
-            var enclosure = await _context.Enclosure.FirstOrDefaultAsync(x => x.Id == id);
+            var enclosure = await _enclosureService.GetEnclosure(id);
 
-            if (enclosure is not null)
+            if (enclosure is null)
             {
-                return Ok(GetModelDto(enclosure));
+                return NotFound();
             }
 
-            return NotFound();
+            return Ok(enclosure);
         }
 
         [HttpPost]
         public async Task<ActionResult<IEnumerable<EnclosureModelDTO>>> PostEnclosures(EnclosureImportDTO enclosureImportDto)
         {
-            var enclosureImport = enclosureImportDto.Enclosures.Select(x =>
-            {
-                var enclosureId = Guid.NewGuid();
+            var importedEnclosures = await _enclosureService.AddEnclosures(enclosureImportDto);
 
-                var enclosureAssets = _context.ZooAssets
-                    .Where(y => x.Objects.Contains(y.Name))
-                    .ToList();
-
-                // Each asset in inclosure added to Relation table
-                foreach (var asset in enclosureAssets)
-                {
-                    var enclosureAsset = new EnclosureAssets
-                    {
-                        EnclosureId = enclosureId,
-                        AssetId = asset.Id,
-                    };
-
-                    _context.EnclosureAssets.Add(enclosureAsset);
-                }
-
-                return new Enclosure
-                {
-                    Id = enclosureId,
-                    Name = x.Name,
-                    Size = x.Size,
-                    Location = x.Location,
-                };
-            });
-
-            // Add Enclosure domain models to database
-            await _context.AddRangeAsync(enclosureImport);
-
-            await _context.SaveChangesAsync();
-
-            var importedEnclosures = _context.Enclosure
-                .Where(x => enclosureImport.Select(y => y.Name).Contains(x.Name)).ToList();
-
-            return Ok(GetModelDTOList(importedEnclosures));
+            return Ok(importedEnclosures);
         }
 
 
@@ -91,31 +56,8 @@ namespace ZooLink.Controllers
         public async Task<ActionResult> Populate()
         {
             // Populates AnimalTypes, ZooAssets and AnimalPreferredAssets tables
-            await _context.PopulateAsync();
-
+            await _enclosureService.Populate();
             return Ok("Populated successfully");
-        }
-
-        private IEnumerable<EnclosureModelDTO> GetModelDTOList(IEnumerable<Enclosure> enclosures)
-        {
-            return enclosures.Select(GetModelDto).ToList();
-        }
-
-        private EnclosureModelDTO GetModelDto(Enclosure enclosure)
-        {
-            var zooAssets = new List<ZooAsset>();
-
-            var enclosureAssets = _context.EnclosureAssets.Where(x => x.EnclosureId == enclosure.Id);
-
-            // Get all objects in enclosure
-            foreach (var enclosureAsset in enclosureAssets)
-            {
-                var asset = _context.ZooAssets.FirstOrDefault(x => x.Id == enclosureAsset.AssetId);
-
-                zooAssets.Add(asset);
-            }
-
-            return enclosure.ToModelDTO(zooAssets);
         }
     }
 
