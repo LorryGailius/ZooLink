@@ -1,0 +1,6 @@
+@ZooLink_HostAddress = http://localhost:5041
+
+GET {{ZooLink_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

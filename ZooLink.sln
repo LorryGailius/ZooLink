@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZooLink", "ZooLink\ZooLink.csproj", "{10162F49-6571-415A-BC7A-4C6A9355AA34}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{10162F49-6571-415A-BC7A-4C6A9355AA34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10162F49-6571-415A-BC7A-4C6A9355AA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10162F49-6571-415A-BC7A-4C6A9355AA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10162F49-6571-415A-BC7A-4C6A9355AA34}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2C56A6D8-A520-4FAC-B54A-5D22B9EC5859}
+	EndGlobalSection
+EndGlobal
