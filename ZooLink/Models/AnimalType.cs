@@ -1,4 +1,4 @@
-﻿using ZooLink.Models.Enums;
+﻿using ZooLink.Enums;
 
 namespace ZooLink.Models;
 

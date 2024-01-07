@@ -1,4 +1,4 @@
-﻿namespace ZooLink.Models.Enums;
+﻿namespace ZooLink.Enums;
 
 public enum EnclosureLocation
 {
