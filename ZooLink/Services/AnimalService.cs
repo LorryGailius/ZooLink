@@ -100,6 +100,11 @@ namespace ZooLink.Services
         {
             var enclosures = _context.Enclosures.ToList().Where(e => _enclosureService.GetEnclosureSpace(e) > 0).ToList();
 
+            if (enclosures.Count == 0)
+            {
+                return Guid.Empty;
+            }
+
             var queue = new PriorityQueue<Enclosure, int>();
 
             foreach (var enclosure in enclosures)
@@ -110,9 +115,12 @@ namespace ZooLink.Services
                 {
                     queue.Enqueue(enclosure, enclosurePriority.Value);
                 }
+                else
+                {
+                    var enclosureName = _context.Enclosures.FirstOrDefault(x => x.Id == enclosure.Id).Name;
+                }
             }
-
-            return queue.Count == 0 ? Guid.Empty : queue.Peek().Id;
+            return queue.Peek().Id;
         }
 
         private int? CalculateEnclosurePriority(Enclosure enclosure, AnimalType animal)
