@@ -1,4 +1,4 @@
-﻿namespace ZooLink.Models;
+﻿namespace ZooLink.Domain.Models;
 
 public class ZooAsset
 {

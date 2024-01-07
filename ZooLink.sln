@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZooLink", "ZooLink\ZooLink.csproj", "{10162F49-6571-415A-BC7A-4C6A9355AA34}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZooLink", "ZooLink\ZooLink.csproj", "{10162F49-6571-415A-BC7A-4C6A9355AA34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZooLink.Domain", "ZooLink.Domain\ZooLink.Domain.csproj", "{5A4A87E6-42A2-4C63-BBC9-83DDE27BD7CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZooLink.DTO", "ZooLink.DTO\ZooLink.DTO.csproj", "{032E36E0-E3A9-42F6-A7FF-9CFB8FA15386}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +19,14 @@ Global
 		{10162F49-6571-415A-BC7A-4C6A9355AA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{10162F49-6571-415A-BC7A-4C6A9355AA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{10162F49-6571-415A-BC7A-4C6A9355AA34}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A4A87E6-42A2-4C63-BBC9-83DDE27BD7CD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A4A87E6-42A2-4C63-BBC9-83DDE27BD7CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A4A87E6-42A2-4C63-BBC9-83DDE27BD7CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A4A87E6-42A2-4C63-BBC9-83DDE27BD7CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{032E36E0-E3A9-42F6-A7FF-9CFB8FA15386}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{032E36E0-E3A9-42F6-A7FF-9CFB8FA15386}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{032E36E0-E3A9-42F6-A7FF-9CFB8FA15386}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{032E36E0-E3A9-42F6-A7FF-9CFB8FA15386}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,6 @@
-﻿using ZooLink.Enums;
+﻿using ZooLink.Domain.Enums;
 
-namespace ZooLink.Models;
+namespace ZooLink.Domain.Models;
 
 public class Enclosure
 {

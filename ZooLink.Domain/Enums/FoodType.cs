@@ -1,4 +1,4 @@
-﻿namespace ZooLink.Enums;
+﻿namespace ZooLink.Domain;
 
 public enum FoodType
 {
