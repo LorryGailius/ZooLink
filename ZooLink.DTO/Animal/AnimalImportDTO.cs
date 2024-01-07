@@ -8,6 +8,6 @@ namespace ZooLink.DTO
 {
     public class AnimalsImportDTO
     {
-        public IEnumerable<AnimalGroupDTO> Animals { get; set; }
+        public required IEnumerable<AnimalGroupDTO> Animals { get; set; }
     }
 }

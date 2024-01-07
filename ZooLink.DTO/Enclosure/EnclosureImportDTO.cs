@@ -4,6 +4,6 @@ namespace ZooLink.DTO
 {
     public class EnclosureImportDTO
     {
-        public IEnumerable<EnclosureDTO> Enclosure { get; set; }
+        public required IEnumerable<EnclosureDTO> Enclosures { get; set; }
     }
 }
