@@ -44,7 +44,7 @@ namespace ZooLink.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<IEnumerable<EnclosureModelDTO>>> PostEnclosure(EnclosureImportDTO enclosureImportDto)
+        public async Task<ActionResult<IEnumerable<EnclosureModelDTO>>> PostEnclosures(EnclosureImportDTO enclosureImportDto)
         {
             var enclosureImport = enclosureImportDto.Enclosures.Select(x =>
             {
@@ -90,7 +90,7 @@ namespace ZooLink.Controllers
         [HttpPost("/api/Populate")]
         public async Task<ActionResult> Populate()
         {
-            // Populates AnimalTypes, ZooAssets and AnimalPreferedAssets tables
+            // Populates AnimalTypes, ZooAssets and AnimalPreferredAssets tables
             await _context.PopulateAsync();
 
             return Ok("Populated successfully");

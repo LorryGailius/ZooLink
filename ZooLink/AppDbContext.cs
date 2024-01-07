@@ -18,7 +18,7 @@ public class AppDbContext : DbContext
 
     public DbSet<EnclosureAssets> EnclosureAssets { get; set; }
 
-    public DbSet<AnimalPreferedAssets> AnimalPreferedAssets { get; set; }
+    public DbSet<AnimalPreferedAssets> AnimalPreferredAssets { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

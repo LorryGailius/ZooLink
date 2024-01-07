@@ -68,7 +68,7 @@ public static class DbContextExtension
          
         await context.AnimalTypes.AddRangeAsync(AnimalTypes.Values);
          
-        await context.AnimalPreferedAssets.AddRangeAsync(AnimalPreferences);
+        await context.AnimalPreferredAssets.AddRangeAsync(AnimalPreferences);
          
         await context.SaveChangesAsync();
     }
