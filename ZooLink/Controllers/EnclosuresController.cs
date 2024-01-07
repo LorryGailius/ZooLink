@@ -22,15 +22,36 @@ namespace ZooLink.Controllers
             _context = context;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<EnclosureModelDTO>>> GetEnclosures()
+        {
+            var enclosures = await _context.Enclosure.ToListAsync();
+
+            return Ok(GetModelDTOList(enclosures));
+        }
+
+        [HttpGet("{id:guid}")]
+        public async Task<ActionResult<EnclosureModelDTO>> GetEnclosure(Guid id)
+        {
+            var enclosure = await _context.Enclosure.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (enclosure is not null)
+            {
+                return Ok(GetModelDto(enclosure));
+            }
+
+            return NotFound();
+        }
+
         [HttpPost]
-        public async Task<ActionResult> PostEnclosure(EnclosureImportDTO enclosureImportDto)
+        public async Task<ActionResult<IEnumerable<EnclosureModelDTO>>> PostEnclosure(EnclosureImportDTO enclosureImportDto)
         {
             var enclosureImport = enclosureImportDto.Enclosures.Select(x =>
             {
                 var enclosureId = Guid.NewGuid();
 
-                var enclosureAssets = _context.ZooAssets.Where(y => x.Objects
-                    .Contains(y.Name))
+                var enclosureAssets = _context.ZooAssets
+                    .Where(y => x.Objects.Contains(y.Name))
                     .ToList();
 
                 // Each asset in inclosure added to Relation table
@@ -59,33 +80,44 @@ namespace ZooLink.Controllers
 
             await _context.SaveChangesAsync();
 
-            var importedEnclosures = _context.Enclosure.Where(x => enclosureImport.Select(y => y.Name).Contains(x.Name));
+            var importedEnclosures = _context.Enclosure
+                .Where(x => enclosureImport.Select(y => y.Name).Contains(x.Name)).ToList();
 
-            return Ok(GetModelDTOs(importedEnclosures));
+            return Ok(GetModelDTOList(importedEnclosures));
         }
 
-        public IEnumerable<EnclosureModelDTO> GetModelDTOs(IEnumerable<Enclosure> enclosures)
+
+        [HttpPost("/api/Populate")]
+        public async Task<ActionResult> Populate()
         {
-            var enclosureModelDTOs = new List<EnclosureModelDTO>();
+            // Populates AnimalTypes, ZooAssets and AnimalPreferedAssets tables
+            await _context.PopulateAsync();
 
-            foreach (var enclosure in enclosures)
+            return Ok("Populated successfully");
+        }
+
+        private IEnumerable<EnclosureModelDTO> GetModelDTOList(IEnumerable<Enclosure> enclosures)
+        {
+            return enclosures.Select(GetModelDto).ToList();
+        }
+
+        private EnclosureModelDTO GetModelDto(Enclosure enclosure)
+        {
+            var zooAssets = new List<ZooAsset>();
+
+            var enclosureAssets = _context.EnclosureAssets.Where(x => x.EnclosureId == enclosure.Id);
+
+            // Get all objects in enclosure
+            foreach (var enclosureAsset in enclosureAssets)
             {
-                var zooAssets = new List<ZooAsset>();
+                var asset = _context.ZooAssets.FirstOrDefault(x => x.Id == enclosureAsset.AssetId);
 
-                var enclosureAssets = _context.EnclosureAssets.Where(x => x.EnclosureId == enclosure.Id);
-
-                // Get all objects in enclosure
-                foreach (var enclosureAsset in enclosureAssets)
-                {
-                    var asset = _context.ZooAssets.FirstOrDefault(x => x.Id == enclosureAsset.AssetId);
-
-                    zooAssets.Add(asset);
-                }
-
-                enclosureModelDTOs.Add(enclosure.ToModelDTO(zooAssets));
+                zooAssets.Add(asset);
             }
 
-            return enclosureModelDTOs;
+            return enclosure.ToModelDTO(zooAssets);
         }
     }
+
+
 }
