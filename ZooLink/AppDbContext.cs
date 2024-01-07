@@ -43,9 +43,9 @@ public class AppDbContext : DbContext
         enclosureAssets.HasKey(x => new { x.EnclosureId, x.AssetId});
         enclosureAssets.HasOne<Enclosure>().WithMany().HasForeignKey(x => x.EnclosureId);
 
-        var animalPreferedAssets = modelBuilder.Entity<AnimalPreferredAssets>();
-        animalPreferedAssets.HasKey(x => new { x.AnimalTypeId, x.AssetId });
-        animalPreferedAssets.HasOne<Animal>().WithMany().HasForeignKey(x => x.AnimalTypeId);
-        animalPreferedAssets.HasOne<ZooAsset>().WithMany().HasForeignKey(x => x.AssetId);
+        var animalPereferredAssets = modelBuilder.Entity<AnimalPreferredAssets>();
+        animalPereferredAssets.HasKey(x => new { x.AnimalTypeId, x.AssetId });
+        animalPereferredAssets.HasOne<Animal>().WithMany().HasForeignKey(x => x.AnimalTypeId);
+        animalPereferredAssets.HasOne<ZooAsset>().WithMany().HasForeignKey(x => x.AssetId);
     }
 }
