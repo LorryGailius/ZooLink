@@ -131,10 +131,9 @@ namespace ZooLink.Services
             return animalModels;
         }
 
-        private int GetEnclosureSpace(Enclosure enclosure)
+        public int GetEnclosureSpace(Enclosure enclosure)
         {
-            var animalCount = _context.Animals
-                .Count(a => a.EnclosureId == enclosure.Id);
+            var animalCount = _context.Animals.Count(a => a.EnclosureId == enclosure.Id);
 
             var capacity = (int)enclosure.Size;
 
