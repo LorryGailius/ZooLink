@@ -1,9 +1,4 @@
-using Microsoft.EntityFrameworkCore;
-using ZooLink.Models;
-
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("Animals"));
 
 // Add services to the container.
 
