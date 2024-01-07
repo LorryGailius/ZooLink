@@ -1,4 +1,5 @@
-﻿namespace ZooLink.Domain.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using ZooLink.Domain.Models;
 
 public class AppDbContext : DbContext
 {

@@ -1,4 +1,4 @@
-﻿using ZooLink.Domain;
+﻿using ZooLink.Domain.Enums;
 
 namespace ZooLink.DTO
 {
