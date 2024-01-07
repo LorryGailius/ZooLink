@@ -33,7 +33,7 @@ namespace ZooLink.Services
 
             foreach (var enclosureDto in enclosureImport)
             {
-                await AddEnclosure(enclosureDto, false);
+                await AddEnclosure(enclosureDto);
             }
 
             await _context.SaveChangesAsync();
@@ -46,24 +46,9 @@ namespace ZooLink.Services
             return GetModelDTOList(importedEnclosures);
         }
 
-        public async Task<EnclosureModelDTO> AddEnclosure(EnclosureDTO enclosureDto, bool saveChanges = true)
+        public async Task<EnclosureModelDTO> AddEnclosure(EnclosureDTO enclosureDto)
         {
             var enclosureId = Guid.NewGuid();
-            var enclosureAssets = _context.ZooAssets
-                    .Where(x => enclosureDto.Objects
-                        .Contains(x.Name)).ToList();
-            
-            // Each asset in inclosure added to Relation table
-            foreach (var asset in enclosureAssets)
-            {
-                var enclosureAsset = new EnclosureAssets
-                {
-                    EnclosureId = enclosureId,
-                    AssetId = asset.Id,
-                };
-
-                await _context.EnclosureAssets.AddAsync(enclosureAsset);
-            }
 
             var enclosure = new Enclosure
             {
@@ -73,10 +58,33 @@ namespace ZooLink.Services
                 Location = enclosureDto.Location,
             };
 
+            await AddAssetList(enclosureId, enclosureDto.Objects);
+
             await _context.Enclosures.AddAsync(enclosure);
-            if(saveChanges) { await _context.SaveChangesAsync(); }
 
             return GetModelDto(enclosure);
+        }
+
+        public async Task AddAssetList(Guid enclosureId, IEnumerable<string> assets)
+        {
+            var enclosureAssets = _context.ZooAssets
+                .Where(x => assets
+                .Contains(x.Name)).ToList();
+
+            foreach (var asset in enclosureAssets)
+            {
+                await AddAsset(enclosureId, asset.Id);
+            }
+        }
+        public async Task AddAsset(Guid enclosureId, Guid assetId)
+        {
+            var enclosureAsset = new EnclosureAssets
+            {
+                EnclosureId = enclosureId,
+                AssetId = assetId,
+            };
+
+            await _context.EnclosureAssets.AddAsync(enclosureAsset);
         }
 
         public async Task Populate()
