@@ -41,7 +41,7 @@ public static class DbContextExtension
         new() { Id = Guid.NewGuid(), Species = "Hyena", Food = FoodType.Carnivore }
     }.ToDictionary(x => x.Species, x => x);
 
-    private static readonly IEnumerable<AnimalPreferedAssets> AnimalPreferences =
+    private static readonly IEnumerable<AnimalPreferredAssets> AnimalPreferences =
         new Dictionary<string, IEnumerable<string>>
             {
                 { "Gorilla", new[] { "Climbing Structures", "Tall Trees", "Swing", "Perches" } },
@@ -56,7 +56,7 @@ public static class DbContextExtension
                 { "Wolf", new[] { "Rocks", "Logs", "Shelter" } },
                 { "Hyena", new[] { "Rocks", "Shelter", "Logs" } }
             }.SelectMany(x => x.Value.Select(y => new { AnimalTypeId = x.Key, AssetName = y }))
-            .Select(x => new AnimalPreferedAssets
+            .Select(x => new AnimalPreferredAssets
             {
                 AnimalTypeId = AnimalTypes[x.AnimalTypeId].Id,
                 AssetId = ZooAssets[x.AssetName].Id

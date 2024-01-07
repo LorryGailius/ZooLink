@@ -1,6 +1,6 @@
 ﻿namespace ZooLink.Domain.Models;
 
-public class AnimalPreferedAssets
+public class AnimalPreferredAssets
 {
     public Guid AnimalTypeId { get; set; }
 

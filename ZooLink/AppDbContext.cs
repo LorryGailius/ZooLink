@@ -12,13 +12,13 @@ public class AppDbContext : DbContext
 
     public DbSet<AnimalType> AnimalTypes { get; set; }
 
-    public DbSet<Enclosure> Enclosure { get; set; }
+    public DbSet<Enclosure> Enclosures { get; set; }
 
     public DbSet<ZooAsset> ZooAssets { get; set; }
 
     public DbSet<EnclosureAssets> EnclosureAssets { get; set; }
 
-    public DbSet<AnimalPreferedAssets> AnimalPreferredAssets { get; set; }
+    public DbSet<AnimalPreferredAssets> AnimalPreferredAssets { get; set; }
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -43,7 +43,7 @@ public class AppDbContext : DbContext
         enclosureAssets.HasKey(x => new { x.EnclosureId, x.AssetId});
         enclosureAssets.HasOne<Enclosure>().WithMany().HasForeignKey(x => x.EnclosureId);
 
-        var animalPreferedAssets = modelBuilder.Entity<AnimalPreferedAssets>();
+        var animalPreferedAssets = modelBuilder.Entity<AnimalPreferredAssets>();
         animalPreferedAssets.HasKey(x => new { x.AnimalTypeId, x.AssetId });
         animalPreferedAssets.HasOne<Animal>().WithMany().HasForeignKey(x => x.AnimalTypeId);
         animalPreferedAssets.HasOne<ZooAsset>().WithMany().HasForeignKey(x => x.AssetId);
