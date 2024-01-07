@@ -62,14 +62,14 @@ public static class DbContextExtension
                 AssetId = ZooAssets[x.AssetName].Id
             });
 
-    public static void Populate(this AppDbContext context)
+    public static async Task PopulateAsync(this AppDbContext context)
     {
-        context.ZooAssets.AddRange(ZooAssets.Values);
-
-        context.AnimalTypes.AddRange(AnimalTypes.Values);
-
-        context.AnimalPreferedAssets.AddRange(AnimalPreferences);
-
-        context.SaveChanges();
+        await context.ZooAssets.AddRangeAsync(ZooAssets.Values);
+         
+        await context.AnimalTypes.AddRangeAsync(AnimalTypes.Values);
+         
+        await context.AnimalPreferedAssets.AddRangeAsync(AnimalPreferences);
+         
+        await context.SaveChangesAsync();
     }
 }
