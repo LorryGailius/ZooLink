@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-
+builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("ZooLink"));
 
 // Add services to the container.
 
