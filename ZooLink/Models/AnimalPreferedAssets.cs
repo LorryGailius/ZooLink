@@ -2,7 +2,7 @@
 
 public class AnimalPreferedAssets
 {
-    public Guid AnimalId { get; set; }
+    public Guid AnimalTypeId { get; set; }
 
     public Guid AssetId { get; set; }
 }
