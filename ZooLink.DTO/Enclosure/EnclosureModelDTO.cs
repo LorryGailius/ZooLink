@@ -19,5 +19,7 @@ namespace ZooLink.DTO
         public EnclosureLocation Location { get; set; }
 
         public required IEnumerable<ZooAsset> Objects { get; set; } 
+
+        public required IEnumerable<AnimalModelDTO> Animals { get; set; }
     }
 }

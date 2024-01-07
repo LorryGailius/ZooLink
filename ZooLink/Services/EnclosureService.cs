@@ -29,45 +29,56 @@ namespace ZooLink.Services
 
         public async Task<IEnumerable<EnclosureModelDTO>> AddEnclosures(EnclosureImportDTO enclosureImportDto)
         {
-            var enclosureImport = enclosureImportDto.Enclosures.Select(x =>
+            var enclosureImport = enclosureImportDto.Enclosures.ToList();
+
+            foreach (var enclosureDto in enclosureImport)
             {
-                var enclosureId = Guid.NewGuid();
-
-                var enclosureAssets = _context.ZooAssets
-                    .Where(y => x.Objects.Contains(y.Name))
-                    .ToList();
-
-                // Each asset in inclosure added to Relation table
-                foreach (var asset in enclosureAssets)
-                {
-                    var enclosureAsset = new EnclosureAssets
-                    {
-                        EnclosureId = enclosureId,
-                        AssetId = asset.Id,
-                    };
-
-                    _context.EnclosureAssets.Add(enclosureAsset);
-                }
-
-                return new Enclosure
-                {
-                    Id = enclosureId,
-                    Name = x.Name,
-                    Size = x.Size,
-                    Location = x.Location,
-                };
-            });
-
-            // Add Enclosures domain models to database
-            await _context.AddRangeAsync(enclosureImport);
+                await AddEnclosure(enclosureDto, false);
+            }
 
             await _context.SaveChangesAsync();
 
             var importedEnclosures = _context.Enclosures
-                .Where(x => enclosureImport.Select(y => y.Name).Contains(x.Name)).ToList();
+                .Where(x => enclosureImport
+                    .Select(y => y.Name)
+                    .Contains(x.Name)).ToList();
 
             return GetModelDTOList(importedEnclosures);
         }
+
+        public async Task<EnclosureModelDTO> AddEnclosure(EnclosureDTO enclosureDto, bool saveChanges = true)
+        {
+            var enclosureId = Guid.NewGuid();
+            var enclosureAssets = _context.ZooAssets
+                    .Where(x => enclosureDto.Objects
+                        .Contains(x.Name)).ToList();
+            
+            // Each asset in inclosure added to Relation table
+            foreach (var asset in enclosureAssets)
+            {
+                var enclosureAsset = new EnclosureAssets
+                {
+                    EnclosureId = enclosureId,
+                    AssetId = asset.Id,
+                };
+
+                await _context.EnclosureAssets.AddAsync(enclosureAsset);
+            }
+
+            var enclosure = new Enclosure
+            {
+                Id = enclosureId,
+                Name = enclosureDto.Name,
+                Size = enclosureDto.Size,
+                Location = enclosureDto.Location,
+            };
+
+            await _context.Enclosures.AddAsync(enclosure);
+            if(saveChanges) { await _context.SaveChangesAsync(); }
+
+            return GetModelDto(enclosure);
+        }
+
         public async Task Populate()
         {
             await _context.PopulateAsync();
@@ -84,16 +95,46 @@ namespace ZooLink.Services
 
             var enclosureAssets = _context.EnclosureAssets.Where(x => x.EnclosureId == enclosure.Id);
 
+            var animalList = GetAnimalModelList(enclosure);
+
             // Get all objects in enclosure
             foreach (var enclosureAsset in enclosureAssets)
             {
-                var asset = _context.ZooAssets.FirstOrDefault(x => x.Id == enclosureAsset.AssetId);
+                var asset = _context.ZooAssets
+                    .FirstOrDefault(x => x.Id == enclosureAsset.AssetId);
 
                 zooAssets.Add(asset);
             }
 
-            return enclosure.ToModelDTO(zooAssets);
+            return enclosure.ToModelDTO(zooAssets, animalList);
         }
 
+        private IEnumerable<AnimalModelDTO> GetAnimalModelList(Enclosure enclosure)
+        {
+            var animals = _context.Animals
+                .Where(x => x.EnclosureId == enclosure.Id).ToList();
+
+            var animalIds = animals.Select(x => x.AnimalTypeId).ToHashSet();
+
+            var animalTypes = _context.AnimalTypes.Where(x => animalIds.Contains(x.Id)).ToDictionary(x => x.Id, x => x);
+
+            var animalModels = animals.Select(x => x.ToModelDTO(animalTypes[x.AnimalTypeId])).ToList();
+
+            return animalModels;
+        }
+
+        private int GetEnclosureSpace(Enclosure enclosure)
+        {
+            var animalCount = _context.Animals
+                .Count(a => a.EnclosureId == enclosure.Id);
+
+            var capacity = (int)enclosure.Size;
+
+            var spaceLeft = capacity - animalCount;
+
+            Console.WriteLine($"Enclosure {enclosure.Name} has {spaceLeft} spaces left");
+
+            return spaceLeft;
+        }
     }
 }
