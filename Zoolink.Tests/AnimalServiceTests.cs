@@ -18,6 +18,13 @@ public class AnimalServiceTests
         return new AppDbContext(options);
     }
 
+    public void Dispose(AppDbContext context)
+    {
+        // Based on https://stackoverflow.com/questions/33490696/how-can-i-reset-an-ef7-inmemory-provider-between-unit-tests
+        // DO NOT USE IN PRODUCTION
+        context.Database.EnsureDeleted();
+    }
+
     [Fact]
 
     public async Task AddAnimals_SingleEnclosureSpeciesConflict_AddsOnlyLion()
@@ -58,8 +65,9 @@ public class AnimalServiceTests
         await context.PopulateAsync();
         var addedAnimals = await animalService.AddAnimals(animals);
 
-        Assert.Equal(1, addedAnimals.Count());
+        Dispose(context);
 
+        Assert.Equal(1, addedAnimals.Count());
         Assert.All(addedAnimals, x => Assert.Equal("Lion", x.Species));
         Assert.DoesNotContain(addedAnimals, x => x.Species is "Zebra");
     }
@@ -108,6 +116,8 @@ public class AnimalServiceTests
         await context.Enclosures.AddAsync(enclosure1);
         await context.PopulateAsync();
         var addedAnimals = await animalService.AddAnimals(animals);
+        
+        Dispose(context);
 
         Assert.Equal(3, addedAnimals.Count());
         Assert.All(addedAnimals, x => Assert.Equal(FoodType.Carnivore, x.Food));
@@ -172,6 +182,8 @@ public class AnimalServiceTests
 
         var enclosures = await enclosureService.GetEnclosures();
 
+        Dispose(context);
+
         Assert.Equal("Enclosure 2", enclosures.FirstOrDefault(x => x.Animals.Any(y => y.Species is "Lion")).Name);
         Assert.Equal(0, enclosures.ElementAt(1).Animals.Count());
     }
@@ -219,6 +231,8 @@ public class AnimalServiceTests
         await context.Enclosures.AddAsync(enclosure1);
         await context.PopulateAsync();
         var addedAnimals = await animalService.AddAnimals(animals);
+
+        Dispose(context);
 
         Assert.Equal(4, addedAnimals.Count());
         Assert.All(addedAnimals, x => Assert.Equal(FoodType.Herbivore, x.Food));
@@ -285,13 +299,16 @@ public class AnimalServiceTests
         var animalService = new AnimalService(context, enclosureService);
 
         await context.Enclosures.AddAsync(enclosure1);
+        await context.Enclosures.AddAsync(enclosure2);
         await context.PopulateAsync();
         await animalService.AddAnimals(animalImportFirst);
         await animalService.AddAnimals(animalImportSecond);
 
         var enclosures = await enclosureService.GetEnclosures();
 
-        Assert.Equal(1, enclosures.ElementAt(0).Animals.Count());
+        Dispose(context);
+
+        Assert.Single(enclosures.ElementAt(0).Animals);
         Assert.Equal(2, enclosures.ElementAt(1).Animals.Count());
         Assert.Contains(enclosures.ElementAt(0).Animals, x => x.Species is "Elephant");
         Assert.Equal(2, enclosures.ElementAt(1).Animals.Count(x => x.Species is "Lion"));
