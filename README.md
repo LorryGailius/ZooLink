@@ -4,7 +4,7 @@ An ASP.NET API used for assigning animals to zoo enclosures
 # Endpoints
 ```/api/Animals``` - Get/Create/Delete Animals <br>
 ```/api/Enclosures``` - Get/Create/Delete operations for Enclosures <br>
-```/api/Dev - Used``` - To populate tables with data <br>
+```/api/Dev``` - Used To populate tables with data <br>
 Before running any ```Animal``` or ```Enclosure``` endpoints populate ```ZooAssets```, available ```AnimalTypes``` and ```AnimalPreferredAssets``` tables
 
 
