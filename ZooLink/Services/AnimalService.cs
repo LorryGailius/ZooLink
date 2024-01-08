@@ -6,14 +6,14 @@ using ZooLink.Extensions;
 
 namespace ZooLink.Services
 {
-    public class AnimalService
+    public class AnimalService : IAnimalService
     {
         private static readonly int SpeciesPreferenceWeight = -3;
 
         private readonly AppDbContext _context;
-        private readonly EnclosureService _enclosureService;
+        private readonly IEnclosureService _enclosureService;
 
-        public AnimalService(AppDbContext context, EnclosureService enclosureService)
+        public AnimalService(AppDbContext context, IEnclosureService enclosureService)
         {
             _context = context;
             _enclosureService = enclosureService;

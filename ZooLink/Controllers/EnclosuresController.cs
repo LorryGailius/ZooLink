@@ -8,9 +8,9 @@ namespace ZooLink.Controllers
     [ApiController]
     public class EnclosuresController : ControllerBase
     {
-        private readonly EnclosureService _enclosureService;
+        private readonly IEnclosureService _enclosureService;
 
-        public EnclosuresController(EnclosureService enclosureService)
+        public EnclosuresController(IEnclosureService enclosureService)
         {
             _enclosureService = enclosureService;
         }

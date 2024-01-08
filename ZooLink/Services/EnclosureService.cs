@@ -5,7 +5,7 @@ using ZooLink.Extensions;
 
 namespace ZooLink.Services
 {
-    public class EnclosureService
+    public class EnclosureService : IEnclosureService
     {
         private readonly AppDbContext _context;
         public EnclosureService(AppDbContext context)

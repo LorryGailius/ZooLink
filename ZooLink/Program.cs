@@ -7,8 +7,8 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options => options.UseInMemoryDatabase("ZooLink"));
 
-builder.Services.AddScoped<EnclosureService>();
-builder.Services.AddScoped<AnimalService>();
+builder.Services.AddScoped<IEnclosureService, EnclosureService>();
+builder.Services.AddScoped<IAnimalService, AnimalService>();
 
 builder.Services.AddControllers()
     .AddJsonOptions(option =>

@@ -8,9 +8,9 @@ namespace ZooLink.Controllers
     [ApiController]
     public class AnimalsController : ControllerBase
     {
-        private readonly AnimalService _animalService;
+        private readonly IAnimalService _animalService;
 
-        public AnimalsController(AnimalService animalService)
+        public AnimalsController(IAnimalService animalService)
         {
             _animalService = animalService;
         }
