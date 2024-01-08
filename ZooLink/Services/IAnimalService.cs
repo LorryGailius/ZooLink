@@ -1,5 +1,4 @@
-﻿using ZooLink.Domain.Models;
-using ZooLink.DTO;
+﻿using ZooLink.DTO;
 
 namespace ZooLink.Services;
 
