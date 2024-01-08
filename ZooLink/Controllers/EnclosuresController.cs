@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ZooLink.Domain.Models;
 using ZooLink.DTO;
-using ZooLink.Extensions;
 using ZooLink.Services;
 
 namespace ZooLink.Controllers

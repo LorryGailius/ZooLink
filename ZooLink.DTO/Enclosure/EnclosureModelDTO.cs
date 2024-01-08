@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ZooLink.Domain.Enums;
+﻿using ZooLink.Domain.Enums;
 using ZooLink.Domain.Models;
 
 namespace ZooLink.DTO

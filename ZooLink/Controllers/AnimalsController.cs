@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ZooLink.Domain.Enums;
-using ZooLink.Domain.Models;
 using ZooLink.DTO;
 using ZooLink.Services;
 
