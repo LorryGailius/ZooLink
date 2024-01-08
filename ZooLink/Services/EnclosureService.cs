@@ -105,11 +105,6 @@ namespace ZooLink.Services
             await _context.EnclosureAssets.AddAsync(enclosureAsset);
         }
 
-        public async Task Populate()
-        {
-            await _context.PopulateAsync();
-        }
-
         private IEnumerable<EnclosureModelDTO> GetModelDTOList(IEnumerable<Enclosure> enclosures)
         {
             return enclosures.Select(GetModelDto).ToList();

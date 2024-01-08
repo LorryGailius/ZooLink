@@ -56,14 +56,7 @@ namespace ZooLink.Controllers
             return NoContent();
         }
 
-        [HttpPost("/api/Populate")]
-        public async Task<ActionResult> Populate()
-        {
-            // Populates AnimalTypes, ZooAssets and AnimalPreferredAssets tables
-            await _enclosureService.Populate();
-            return Ok("Populated successfully");
-        }
+        
     }
-
 
 }
