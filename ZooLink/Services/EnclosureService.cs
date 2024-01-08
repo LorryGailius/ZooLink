@@ -65,7 +65,25 @@ namespace ZooLink.Services
             return GetModelDto(enclosure);
         }
 
-        public async Task AddAssetList(Guid enclosureId, IEnumerable<string> assets)
+        public async Task<Guid> RemoveEnclosure(Guid id)
+        {
+            var enclosure = await _context.Enclosures.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (enclosure is null)
+            {
+                return Guid.Empty;
+            }
+
+            _context.Enclosures.Remove(enclosure);
+            _context.EnclosureAssets.RemoveRange(_context.EnclosureAssets.Where(x => x.EnclosureId == id));
+            _context.Animals.RemoveRange(_context.Animals.Where(x => x.EnclosureId == id));
+
+            await _context.SaveChangesAsync();
+
+            return id;
+        }
+
+        private async Task AddAssetList(Guid enclosureId, IEnumerable<string> assets)
         {
             var enclosureAssets = _context.ZooAssets
                 .Where(x => assets
@@ -76,7 +94,7 @@ namespace ZooLink.Services
                 await AddAsset(enclosureId, asset.Id);
             }
         }
-        public async Task AddAsset(Guid enclosureId, Guid assetId)
+        private async Task AddAsset(Guid enclosureId, Guid assetId)
         {
             var enclosureAsset = new EnclosureAssets
             {

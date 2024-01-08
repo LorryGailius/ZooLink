@@ -45,7 +45,19 @@ namespace ZooLink.Services
             return importedAnimals;
         }
 
-        public async Task<IEnumerable<AnimalModelDTO>> AssignAnimalGroup(AnimalGroupDTO animalGroupDto)
+        public async Task<Guid> RemoveAnimal(Guid id)
+        {
+            var animal = await _context.Animals.FirstOrDefaultAsync(x => x.Id == id);
+
+            if (animal is null) { return Guid.Empty; }
+
+            _context.Animals.Remove(animal);
+            await _context.SaveChangesAsync();
+
+            return animal.Id;
+        }
+
+        private async Task<IEnumerable<AnimalModelDTO>> AssignAnimalGroup(AnimalGroupDTO animalGroupDto)
         {
             var importedAnimals = new List<AnimalModelDTO>();
 
@@ -68,7 +80,7 @@ namespace ZooLink.Services
             return importedAnimals;
         }
 
-        public async Task<AnimalModelDTO> AssignAnimal(AnimalType animalType, Guid enclosureId)
+        private async Task<AnimalModelDTO> AssignAnimal(AnimalType animalType, Guid enclosureId)
         {
             if (enclosureId == Guid.Empty)
             {
@@ -120,7 +132,7 @@ namespace ZooLink.Services
                     var enclosureName = _context.Enclosures.FirstOrDefault(x => x.Id == enclosure.Id).Name;
                 }
             }
-            return queue.Peek().Id;
+            return queue.Count == 0 ? Guid.Empty : queue.Peek().Id;
         }
 
         private int? CalculateEnclosurePriority(Enclosure enclosure, AnimalType animal)

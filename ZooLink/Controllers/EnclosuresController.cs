@@ -1,6 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using ZooLink.Domain.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using ZooLink.DTO;
 using ZooLink.Services;
 
@@ -45,6 +43,18 @@ namespace ZooLink.Controllers
             return Ok(importedEnclosures);
         }
 
+        [HttpDelete]
+        public async Task<ActionResult> DeleteEnclosure(Guid id)
+        {
+            var removedEnclosureId = await _enclosureService.RemoveEnclosure(id);
+
+            if (removedEnclosureId == Guid.Empty)
+            {
+                return NotFound();
+            }
+
+            return NoContent();
+        }
 
         [HttpPost("/api/Populate")]
         public async Task<ActionResult> Populate()
