@@ -140,8 +140,7 @@ namespace ZooLink.Services
             var neighboringAnimals = GetEnclosedAnimals(enclosure);
 
             var sameSpecies = neighboringAnimals
-                .Where(a => a.Species == animal.Species)
-                .Count();
+                .Count(a => a.Species == animal.Species);
 
             var favObjectIds = new List<Guid>();
 
@@ -154,7 +153,9 @@ namespace ZooLink.Services
                 favObjectIds.Add(enrichmentObject.Id);
             }
 
-            var favObjectCount = _context.EnclosureAssets.Where(x => x.EnclosureId == enclosure.Id && favObjectIds.Contains(x.AssetId)).Count();
+            var favObjectCount = _context.EnclosureAssets
+                .Where(x => x.EnclosureId == enclosure.Id)
+                .Count(x => favObjectIds.Contains(x.AssetId));
 
             if (animal.Food is FoodType.Herbivore)
             {
