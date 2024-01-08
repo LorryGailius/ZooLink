@@ -43,7 +43,7 @@ namespace ZooLink.Controllers
             return Ok(importedEnclosures);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteEnclosure(Guid id)
         {
             var removedEnclosureId = await _enclosureService.RemoveEnclosure(id);
@@ -58,5 +58,5 @@ namespace ZooLink.Controllers
 
         
     }
-
+    
 }

@@ -43,7 +43,7 @@ namespace ZooLink.Controllers
             return Ok(importedAnimals);
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:guid}")]
         public async Task<ActionResult> DeleteAnimal(Guid id)
         {
             var removedAnimalId = await _animalService.RemoveAnimal(id);
