@@ -9,6 +9,7 @@ public interface IEnclosureService
     Task<EnclosureModelDTO> GetEnclosure(Guid id);
     Task<IEnumerable<EnclosureModelDTO>> AddEnclosures(EnclosureImportDTO enclosureImportDto);
     Task<EnclosureModelDTO> AddEnclosure(EnclosureDTO enclosureDto);
+    Task<Guid> RemoveEnclosure(Guid id);
     Task Populate();
     int GetEnclosureSpace(Enclosure enclosure);
 }
